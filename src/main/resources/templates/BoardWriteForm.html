@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<!-- include libraries(jQuery, bootstrap) -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+</head>
+
+<style>
+    .layout {
+        width: 90%;
+        margin: 0 auto;
+        margin-top: 40px;
+    }
+
+    input[type="text"],
+    textarea {
+        width: calc(100% - 20px);
+        margin-top: 10px;
+        padding: 10px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    textarea {
+        min-height: 200px;
+    }
+    
+    .note-editor .note-editable {
+        height: 300px; /* Summernote 편집 영역 높이 조정 */
+    }
+
+    button[type="submit"],
+    .btn-go-back {
+        width: 120px;
+        padding: 5px;
+        margin-top: 10px;
+        margin-left: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        float: right;
+    }
+
+    button[type="submit"]:hover,
+    .btn-go-back:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-go-back {
+        background-color: #6c757d;
+    }
+
+    .btn-go-back:hover {
+        background-color: #5a6268;
+    }
+</style>
+
+<body>
+	<div class="layout">
+		<form id="boardForm" action="/board/write" method="post" enctype="multipart/form-data">
+			<input id="reg_id" name="reg_id" type="text" placeholder="작성자를 입력하세요." required>
+			<input id="title" name="title" type="text" placeholder="제목을 입력하세요." required>
+			<textarea name="content" placeholder="내용을 입력하세요."></textarea>
+			<input type="file" name="file">
+			<button id="submitBtn" type="submit">작성</button>
+		</form>
+		<button class="btn-go-back" onclick="location.href='/board/list'">글 목록으로<div></div> 돌아가기</button>
+	</div>
+	
+	<script>
+		// 폼 제출 시 유효성 검사
+		document.getElementById('submitBtn').addEventListener('click', function(event) {
+			var regIdField = document.getElementById('reg_id');
+			var titleField = document.getElementById('title');
+			
+			// 작성자 필드가 비어 있는 경우
+			if (regIdField.value.trim() === '') {
+				regIdField.setCustomValidity('작성자를 입력하세요.');
+			} else {
+				regIdField.setCustomValidity('');
+			}
+
+			// 제목 필드가 비어 있는 경우
+			if (titleField.value.trim() === '') {
+				titleField.setCustomValidity('제목을 입력하세요.');
+			} else {
+				titleField.setCustomValidity('');
+			}
+		});
+	</script>
+	
+</body>
+
+	<!-- <script type="text/javascript">
+			$(document).ready(function() {
+		  	$('#summernote').summernote();
+		});
+	</script> -->
+
+</html>

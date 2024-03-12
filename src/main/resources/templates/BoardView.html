@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>게시글 상세페이지</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<!-- include libraries(jQuery, bootstrap) -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+<style>
+body {
+	font-family: Arial, sans-serif;
+	background-color: #f4f4f4;
+	padding: 20px;
+}
+
+.container {
+	max-width: 800px;
+	margin: 0 auto;
+	background-color: #fff;
+	padding: 50px;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+	color: #333;
+	margin-bottom: 20px;
+}
+
+p {
+	margin-bottom: 10px;
+	line-height: 1.6;
+}
+
+.btn {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: #fff;
+	text-decoration: none;
+	border-radius: 5px;
+	transition: background-color 0.3s ease;
+	margin-right: 10px;
+}
+
+.btn:hover {
+	background-color: #0056b3;
+}
+
+.delete-link {
+	display: inline-block;
+	margin-top: 20px;
+	color: #d9534f;
+	text-decoration: none;
+	padding: 10px 20px;
+	background-color: #fff;
+	border: 1px solid #d9534f;
+	border-radius: 5px;
+	transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+.delete-link:hover {
+	color: #fff;
+	background-color: #d9534f;
+	border-color: #d9534f;
+}
+
+button[type="submit"], .btn-go-back {
+	width: 120px;
+	padding: 5px;
+	margin-top: 10px;
+	margin-left: 10px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	float: right;
+}
+
+button[type="submit"]:hover, .btn-go-back:hover {
+	background-color: #0056b3;
+}
+
+.btn-go-back {
+	background-color: #6c757d;
+}
+
+.btn-go-back:hover {
+	background-color: #5a6268;
+}
+
+.modify-delete-container {
+	text-align: right;
+	margin-top: 10px;
+}
+
+.modify-link {
+	display: inline-block;
+	margin-top: 20px;
+	color: #28a745;
+	padding: 10px 20px;
+	background-color: #fff;
+	border: 1px solid #28a745;
+	text-decoration: none;
+	border-radius: 5px;
+	transition: background-color 0.3s ease;
+}
+
+.modify-link:hover {
+	color: #fff;
+	background-color: #28a745;
+	border-color: #28a745;
+}
+
+.comment-container {
+	margin-top: 30px;
+	border-top: 1px solid #ccc;
+	padding-top: 20px;
+}
+
+.comment-input {
+	width: calc(100% - 20px);
+	margin-bottom: 10px;
+	padding: 10px;
+	box-sizing: border-box;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	display: none; /* 처음에는 숨김 */
+}
+
+.comment-button {
+	width: 120px;
+	padding: 5px;
+	margin-top: 10px;
+	margin-left: 10px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	float: right;
+}
+
+.comment-button:hover {
+	background-color: #0056b3;
+}
+</style>
+
+</head>
+<body>
+	<div class="container">
+		<h1>
+			제목: <span th:text="${board.title}">제목입니다.</span>
+		</h1>
+		<p>
+			작성자: <span th:text="${board.reg_id}">작성자입니다.</span>
+		</p>
+		<p>
+			내용: <span th:text="${board.content}">내용이 들어갈 부분입니다.</span>
+		</p>
+		<a th:if="${board.filepath}" th:href="@{${board.filepath}}">첨부파일보기</a> <a th:href="@{/board/modify/{id}(id=${board.id})}" class="modify-link">수정</a>
+		<button class="btn-go-back" onclick="location.href='/board/list'">
+			글 목록으로
+			<div></div>
+			돌아가기
+		</button>
+		<a class="delete-link" th:href="@{/board/delete(id=${board.id})}" th:onclick="'return boardDelete();'">글 삭제</a>
+
+		<div class="comment-container">
+			<button class="btn" id="showCommentFormBtn">댓글쓰기</button>
+			<div id="commentForm" class="comment-input">
+
+				<input type="text" name="reg_id" placeholder="작성자를 입력하세요." id="reg_id" required><br> <br>
+				<textarea name="comment" placeholder="댓글을 입력하세요." id="comment" required></textarea>
+				<input type="hidden" th:value="${board.id}" id="board_id">
+				<button id="commentBtn" class="comment-button" onclick="send()">댓글 작성</button>
+			</div>
+		</div>
+
+		<div>
+			<h3>댓글 목록</h3>
+			<ul th:each="comment : ${comment}">
+				<li>
+					<p>
+						작성자: <span th:text="${comment.reg_id}"></span>
+					</p>
+					<p>
+						댓글 내용: <span th:text="${comment.comment}"></span>
+					</p> <a class="delete-link" th:href="@{/board/comment/delete(id=${comment.id})}" th:onclick="'return commentDelete();'">댓글 삭제</a>
+				</li>
+			</ul>
+
+		</div>
+	</div>
+
+	<script>
+    // 댓글 입력 폼을 토글하는 함수
+    document.getElementById('showCommentFormBtn').addEventListener('click', function() {
+        var commentForm = document.getElementById('commentForm');
+        if (commentForm.style.display === 'none' || commentForm.style.display === '') {
+            commentForm.style.display = 'block';
+        } else {
+            commentForm.style.display = 'none';
+        }
+    });
+    
+    // 댓글 입력 폼 초기화
+    document.getElementById('comment').value = '';
+    document.getElementById('commentForm').style.display = 'none'; // 폼 숨기기
+
+    </script>
+
+	<script>
+    	function send(){
+    	
+		    // 폼 제출 시 유효성 검사
+			var regIdField = document.getElementById('reg_id');
+			var commentField = document.getElementById('comment');
+			
+			
+			
+		
+		
+		    // 작성자 필드가 비어 있는 경우
+		    if (regIdField.value.trim() === '') {
+		        alert('작성자를 입력하세요.');
+		        return false; // 서버 요청 막기
+		    }
+		
+		    // 댓글 내용 필드가 비어 있는 경우
+		    if (commentField.value.trim() === '') {
+		        alert('댓글을 입력하세요.');
+		        return false; // 서버 요청 막기
+		    }
+    	
+    	
+			let data = {
+				comment : document.getElementById("comment").value,
+				reg_id : document.getElementById("reg_id").value,
+				board : {
+					id : document.getElementById("board_id").value
+				}
+			}
+			
+ 			$.ajax({
+				type: "POST",
+				dataType: "json",
+				contentType: "application/json; charset=UTF-8;",
+				data: JSON.stringify(data),
+				url: "/board/comment",
+				success: function(result) {
+					if(result == 1){
+						location.reload(true);
+					}
+				}
+			});
+    	
+    	}
+    
+        function boardDelete() {
+            var result = confirm("글을 삭제하시겠습니까?");
+            if (result) {
+                 return true;
+            }
+            return false;
+        }
+        
+        function commentDelete() {
+            var result = confirm("댓글을 삭제하시겠습니까?");
+            if (result) {
+                 return true;
+            }
+            return false;
+        }
+    </script>
+</body>
+</html>

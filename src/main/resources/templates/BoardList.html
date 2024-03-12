@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>게시물 리스트 페이지</title>
+</head>
+
+<style>
+    .layout {
+        width: 90%;
+        margin: 0 auto;
+        margin-top: 40px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    h1 {
+        text-align: center;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #ddd;
+    }
+
+    a {
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+    
+    th:nth-child(1),
+    td:nth-child(1) {
+        width: 10%;
+    }
+    
+    th:nth-child(2),
+    td:nth-child(2) {
+        width: 10%;
+    }
+    
+    th:nth-child(3),
+    td:nth-child(3) {
+        width: 40%;
+    }
+    
+    th:nth-child(4),
+    td:nth-child(4),
+    th:nth-child(5),
+    td:nth-child(5) {
+        width: 20%;
+    }
+    
+    .button-container {
+        margin-top: 20px;
+    }
+    
+    .button-container a {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-right: 10px;
+    }
+    
+    .button-container a:hover {
+        background-color: #0056b3;
+    }
+    
+    .pagination {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .pagination a {
+        display: inline-block;
+        padding: 5px 10px;
+        margin-right: 5px;
+        border: 1px solid #007bff;
+        border-radius: 5px;
+        color: #007bff;
+        text-decoration: none;
+    }
+    
+    .pagination a:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+    
+    .pagination .current {
+        background-color: #007bff;
+        color: #fff;
+    }
+</style>
+
+<body>
+    <h1>테스트 게시판</h1>
+    <div class="layout">
+        <table>
+            <thead>
+                <tr>
+                    <th>작성자</th>
+                    <th>글번호</th>
+                    <th>제목</th>
+                    <th>생성일</th>
+                    <th>수정일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="board : ${list}">
+                    <td th:text="${board.reg_id}">작성자</td>
+                    <td th:text="${board.id}">글번호</td>
+                    <td>
+                        <a th:text="${board.title}" th:href="@{/board/view(id=${board.id})}"> 제목</a>
+                    </td>
+                    <td th:text="${#temporals.format(board.reg_dtm, 'yyyy-MM-dd HH:mm:ss')}">생성일</td> <!-- #temporals.format(): 특정 형식의 문자열로 출력할 때 사용 -->
+                    <td th:text="${#temporals.format(board.mod_dtm, 'yyyy-MM-dd HH:mm:ss')}">수정일</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="button-container">
+            <a href="/board/writeForm">새 글 쓰기</a>
+        </div>
+        
+        <div class="pagination">
+            <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                <a th:if="${page != nowPage}" th:href="@{/board/list(page=${page - 1}, searchKeyword=${param.searchKeyword})}" th:text="${page}"></a>
+                <strong th:if="${page == nowPage}" th:text="${page}" class="current"></strong>
+            </th:block>
+            <form th:action="@{/board/list}" method="get">
+            	<input type="text" name="searchKeyword">
+            	<button type="submit">검색</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
