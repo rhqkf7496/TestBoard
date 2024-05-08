@@ -52,6 +52,7 @@ public class BoardController {
 		model.addAttribute("searchUrl", "/board/list");
 		
 		return "message";
+		
 	}
 
 	@GetMapping("/board/list")

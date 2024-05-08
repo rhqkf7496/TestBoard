@@ -227,10 +227,6 @@ button[type="submit"]:hover, .btn-go-back:hover {
 		    // 폼 제출 시 유효성 검사
 			var regIdField = document.getElementById('reg_id');
 			var commentField = document.getElementById('comment');
-			
-			
-			
-		
 		
 		    // 작성자 필드가 비어 있는 경우
 		    if (regIdField.value.trim() === '') {
@@ -243,7 +239,6 @@ button[type="submit"]:hover, .btn-go-back:hover {
 		        alert('댓글을 입력하세요.');
 		        return false; // 서버 요청 막기
 		    }
-    	
     	
 			let data = {
 				comment : document.getElementById("comment").value,
