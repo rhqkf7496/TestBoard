@@ -19,27 +19,27 @@ import lombok.Data;
 @Entity
 @Table(name = "comment")
 public class CommentVO {
-	
+
 	@Id
 	@Column(length = 10)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@Column(nullable = false)
 	private String comment;
-	
+
 	@Column(nullable = false)
 	private String reg_id;
-	
+
 	private LocalDateTime reg_dtm;
-	
+
 	@PrePersist
-    protected void onCreate() {
-        reg_dtm = LocalDateTime.now(); // 생성일을 현재 날짜 및 시간으로 설정
-    }
-    
+	protected void onCreate() {
+		reg_dtm = LocalDateTime.now(); // 생성일을 현재 날짜 및 시간으로 설정
+	}
+
 	@ManyToOne
 	@JoinColumn(name = "board_id")
 	private BoardVO board;
-	
+
 }
