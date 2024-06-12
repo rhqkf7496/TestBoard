@@ -170,7 +170,7 @@ button[type="submit"]:hover, .btn-go-back:hover {
 			내용: <span th:text="${board.content}">내용이 들어갈 부분입니다.</span>
 		</p>
 		<a th:if="${board.filepath}" th:href="@{${board.filepath}}">첨부파일보기</a> <a th:href="@{/board/modify/{id}(id=${board.id})}" class="modify-link">수정</a>
-		<button class="btn-go-back" onclick="location.href='/board/list'">
+		<button class="btn-go-back" onclick="location.href='/'">
 			글 목록으로
 			<div></div>
 			돌아가기

@@ -10,9 +10,9 @@ spring:
       
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/board?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&allowMultiQueries=true
-    username: root
-    password: Blue8119!
+    url: jdbc:mysql://(IP):(PORT)/(테이블명)?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    username: 계정명
+    password: 비밀번호
     
   jpa:
     open-in-view: true

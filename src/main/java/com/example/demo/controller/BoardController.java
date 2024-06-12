@@ -31,11 +31,11 @@ public class BoardController {
 	@Autowired
 	CommentService commentService;
 
-	@GetMapping("/")
-	public String index() {
-		return "index";
-
-	}
+	/*
+	 * @GetMapping("/") public String index() { return "index";
+	 * 
+	 * }
+	 */
 
 	@GetMapping("/board/writeForm")
 	public String boardWriteForm() {
@@ -49,13 +49,13 @@ public class BoardController {
 		boardService.write(board, file);
 		
 		model.addAttribute("message", "글 작성이 완료되었습니다.");
-		model.addAttribute("searchUrl", "/board/list");
+		model.addAttribute("searchUrl", "/");
 		
 		return "message";
 		
 	}
 
-	@GetMapping("/board/list")
+	@GetMapping("/")
 	public String boardList(Model model,
 							@PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.DESC) Pageable pageable,
 							String searchKeyword) {
@@ -94,7 +94,7 @@ public class BoardController {
 	public String boardDelete(Integer id) {
 		
 		boardService.boardDelete(id);
-		return "redirect:/board/list";
+		return "redirect:/";
 		
 	}
 	
@@ -117,7 +117,7 @@ public class BoardController {
 		
 		boardService.write(boardTemp, file);
 		
-		return "redirect:/board/list";
+		return "redirect:/";
 	}
 	
 	
