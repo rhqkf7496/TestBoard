@@ -69,7 +69,7 @@
 			<input name="reg_id" type="text" th:value="${board.reg_id}" placeholder="작성자를 입력하세요.">
 			<input name="title" type="text" th:value="${board.title}" placeholder="제목을 입력하세요.">
 			<textarea name="content" th:text="${board.content}" placeholder="내용을 입력하세요."></textarea>
-			<a th:if="${board.filepath}" th:href="@{${board.filepath}}" >첨부파일보기</a><br><br>
+			<a th:if="${board.filepath}" th:href="@{${board.filepath}}" target="_blankj">첨부파일보기</a><br><br>
 			<input type="file" name="file">
 			<button type="submit" th:onclick="return boardUpdate();">수정</button>
 			<button class="btn-go-back" onclick="location.href='/board/list'">글 목록으로<div></div> 돌아가기</button>
